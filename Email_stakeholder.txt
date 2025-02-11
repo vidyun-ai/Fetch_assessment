@@ -1,0 +1,50 @@
+Subject: Data Quality Issues Identified & Next Steps
+
+Hello Fetch Manager,
+
+Hope you are doing well!
+
+We've conducted an analysis of our key data tables and identified several data quality issues that could impact reporting, analytics, and business operations. Below is a summary of our findings:
+
+What Questions Do We Have About the Data?
+- Are these duplicate/missing values expected due to our data pipeline, or should we enforce stricter validations?
+- Are there specific business rules we should follow when resolving data inconsistencies?
+- What is the intended data structure, and are there any undocumented relationships we should consider?
+- Is any of my assumption on Table join wrong?
+
+How We Discovered the Data Quality Issues:
+We utilized a structured data quality check script that performed various analyses on our datasets, including:
+- Duplicate record detection
+- Missing value identification
+- Data type validation
+- Outlier detection using the Interquartile Range (IQR) method
+- Relationship integrity checks between tables (e.g., ensuring receipts link to valid users and products)
+
+Key Issues Identified:
+- User Data Integrity: 57% of user records have duplicate IDs, which could lead to inaccurate user counts and tracking issues.
+- CPG Data Duplication: 16 duplicate IDs were found in the CPG dataset, potentially affecting product categorization.
+- Rewards Data Completeness: 43% of records are missing `pointsPayerId`, impacting reward attributions.
+- Receipt-Product Linkage Gaps: Only 1.2% of receipt items are mapped to known products, which severely limits product-level insights.
+- User-Receipt Mapping Issues: 148 receipts lack associated user data, creating potential attribution gaps.
+
+What Do We Need to Know to Resolve These Issues?
+- Should we implement de-duplication rules, and if so, what criteria should be used to merge records?
+- How should missing values be handled—should we infer, backfill, or exclude incomplete records?
+- Are there known issues in upstream data sources that contribute to these inconsistencies?
+
+What Other Information Would Help Optimize Data Assets?
+- A clear definition of data ownership and accountability across teams.
+- Documentation on how data should flow through our pipeline, from ingestion to storage.
+- Business logic that governs data relationships and expected values.
+
+Performance and Scaling Concerns & Mitigation Plan
+- Data Volume: Large amounts of duplicate and missing data could slow down queries and impact system performance.
+- Indexing & Storage: We may need to optimize indexing and storage strategies to handle larger datasets efficiently.
+- Real-Time Processing: If real-time analytics are required, we need to ensure that data validation and cleanup processes do not introduce latency.
+- Governance & Automation: Implementing automated quality checks and alerts could prevent future data inconsistencies.
+
+Your input will help us determine the best course of action to ensure high-quality, reliable data for decision-making. Let me know a good time to discuss this further.
+
+Best,
+Vidyun
+
