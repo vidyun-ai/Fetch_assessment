@@ -1,0 +1,93 @@
+-- 1. Top 5 brands by receipts scanned for most recent month
+WITH RecentMonth AS (
+    SELECT MAX(DATE_TRUNC('month', createDate)) AS max_month
+    FROM Receipt
+)
+SELECT b.name AS brand, COUNT(r._id) AS receipt_count
+FROM Receipt r
+JOIN Receipt_Item_List ril ON r._id = ril.Receipt_id
+JOIN Product p ON ril.Product_id = p._id
+JOIN Brand b ON p.Brand_id = b._id
+WHERE DATE_TRUNC('month', r.createDate) = (SELECT max_month FROM RecentMonth)
+GROUP BY b.name
+ORDER BY receipt_count DESC
+LIMIT 5;
+
+
+-- 2. Compare top 5 brands ranking between recent and previous month
+
+WITH RankedBrands AS (
+    SELECT 
+        DATE_TRUNC('month', r.createDate) AS month,
+        b.name AS brand,
+        COUNT(r._id) AS receipt_count,
+        RANK() OVER (PARTITION BY DATE_TRUNC('month', r.createDate) ORDER BY COUNT(r._id) DESC) AS rank
+    FROM Receipt r
+    JOIN Receipt_Item_List ril ON r._id = ril.Receipt_id
+    JOIN Product p ON ril.Product_id = p._id
+    JOIN Brand b ON p.Brand_id = b._id
+    GROUP BY month, b.name
+)
+SELECT rb1.month AS recent_month, rb1.brand, rb1.rank AS recent_rank, rb2.rank AS previous_rank
+FROM RankedBrands rb1
+JOIN RankedBrands rb2 
+    ON rb1.brand = rb2.brand 
+    AND rb1.month = rb2.month + INTERVAL '1 month'
+WHERE rb1.rank <= 5 OR rb2.rank <= 5
+ORDER BY rb1.month DESC, rb1.rank;
+
+
+
+-- 3. Compare average spend between Accepted and Rejected receipts
+
+SELECT rewardsReceiptStatus, AVG(totalSpent) AS avg_spend
+FROM Receipt
+WHERE rewardsReceiptStatus IN ('Accepted', 'Rejected')
+GROUP BY rewardsReceiptStatus;
+
+
+
+-- 4. Compare total items purchased between Accepted and Rejected receipts
+
+SELECT r.rewardsReceiptStatus, SUM(ril.quantityPurchased) AS total_items
+FROM Receipt r
+JOIN Receipt_Item_List ril ON r._id = ril.Receipt_id
+WHERE r.rewardsReceiptStatus IN ('Accepted', 'Rejected')
+GROUP BY r.rewardsReceiptStatus;
+
+
+-- 5. Brand with most spend among recent users (past 6 months)
+
+WITH RecentUsers AS (
+    SELECT _id 
+    FROM User 
+    WHERE createdDate >= CURRENT_DATE - INTERVAL '6 months'
+)
+SELECT b.name AS brand, SUM(r.totalSpent) AS total_spend
+FROM Receipt r
+JOIN Receipt_Item_List ril ON r._id = ril.Receipt_id
+JOIN Product p ON ril.Product_id = p._id
+JOIN Brand b ON p.Brand_id = b._id
+WHERE r.userId IN (SELECT _id FROM RecentUsers)
+GROUP BY b.name
+ORDER BY total_spend DESC
+LIMIT 1;
+
+
+-- 6. Brand with most transactions among recent users (past 6 months)
+
+WITH RecentUsers AS (
+    SELECT _id 
+    FROM User 
+    WHERE createdDate >= CURRENT_DATE - INTERVAL '6 months'
+)
+SELECT b.name AS brand, COUNT(r._id) AS transaction_count
+FROM Receipt r
+JOIN Receipt_Item_List ril ON r._id = ril.Receipt_id
+JOIN Product p ON ril.Product_id = p._id
+JOIN Brand b ON p.Brand_id = b._id
+WHERE r.userId IN (SELECT _id FROM RecentUsers)
+GROUP BY b.name
+ORDER BY transaction_count DESC
+LIMIT 1;
+
