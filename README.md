@@ -29,11 +29,11 @@ This project is designed to retrieve data from a specified JSON, organize, quali
 
 5. **fetch_queries.txt** contains SQL queries
 
-6. **Email_stakeholder.txt** contains the email that needs to be sent to stakeholder
+6. **Email_stakeholder.txt** contains the email that needs to be sent to the stakeholder
 
 ## Credits
-- ChatGPT
 - https://www.startdataengineering.com/post/types-of-dq-checks/
 - www.w3schools.com/mysql
+- ChatGPT
 
 
