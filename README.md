@@ -31,4 +31,9 @@ This project is designed to retrieve data from a specified JSON, organize, quali
 
 6. **Email_stakeholder.txt** contains the email that needs to be sent to stakeholder
 
+## Credits
+- ChatGPT
+- https://www.startdataengineering.com/post/types-of-dq-checks/
+- www.w3schools.com/mysql
+
 
