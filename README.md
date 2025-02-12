@@ -1,6 +1,6 @@
 # Fetch Assessment
 
-This project is designed to retrieve data from a specified JSON, organize, quality check and email stakeholders
+This project is designed to retrieve data from a specified JSON, organize, quality check, and email stakeholders
 
 ## Installation
 
@@ -19,24 +19,11 @@ This project is designed to retrieve data from a specified JSON, organize, quali
 
 ## Usage
 
-1. **Run the Application**:
-   The application contains .ipynb file which can run on Google colab with data
-   In order 
+1.Data folder contains the JSON files related to the project
+2.Fetch_ERD_Proposed.png is the proposed ERD for the JSON files. Though 3NF format can be more achieved, this proposed ERD will help more to organize the data better
+3.Fetch_Analysis.ipynb contains Python code to generate the tables and checks for quality issues and summary of each table and generate the report
+4.Data_Analysis_Report.xlsx -This file contains each table and their data quality summary
+5.fetch_queries.txt contains SQL queries
+6.Email_stakeholder.txt contains the email that needs to be sent for stakeholder
 
-3. **Functionality**:
-   - The application retrieves data from the specified JSON URL.
-   - It processes the data to group items by `listId` and sorts them by `name`.
-   - Items with blank or null `name` values are excluded from the display.
-
-## Testing
-
-To ensure the application works as expected:
-
-1. **Scroll Through the List**: Navigate through the entire list to verify all items are displayed correctly.
-2. **Reverse the List**: If applicable, use the provided functionality to reverse the list order and ensure it displays correctly.
-3. **Search Functionality**: Test the search feature by searching for specific `name` or `listId` values to confirm accurate filtering.
-
-## About
-
-This project was developed as part of the Fetch Assessment for Software Engineer (Mobile) Apprenticeship.
 
